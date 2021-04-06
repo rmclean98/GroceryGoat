@@ -3,19 +3,19 @@ app = Flask(__name__)
 
 @app.route('/')
 def main():
-    return render_template('index.html')
+    return render_template('GGHome.html')
 
-@app.route('/coupons')
+@app.route('/Lists')
 def coupons():
-    return render_template('coupons.html')
+    return render_template('GGLists.html')
 
-@app.route('/recipes')
+@app.route('/Recipes')
 def recipes():
-    return render_template('recipes.html')
+    return render_template('GGRecipe.html')
 
-@app.route('/login')
+@app.route('/Login')
 def login():
-    return render_template('login.html')
+    return render_template('GGLogin.html')
 
 if __name__ == '__main__':
     app.run()
