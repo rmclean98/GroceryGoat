@@ -6,30 +6,56 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
 
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-    <a href="/" class="navbar-brand">Grocery Goat</a>
-    <button class="navbar-toggler  ml-auto" data-toggle="collapse" data-target="#navbarMenu">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarMenu">
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a href="/Login" class="nav-link">Login</a>
-            </li>
-            <li class="nav-item">
-                <a href="/Lists" class="nav-link">Lists</a>
-            </li>
-            <li class="nav-item">
-                <a href="/Recipes" class="nav-link">Recipes</a>
-            </li>
-        </ul>
-    </div>
+        <a href="/" class="navbar-brand">Grocery Goat</a>
+        <button class="navbar-toggler  ml-auto" data-toggle="collapse" data-target="#navbarMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarMenu">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="/Login" class="nav-link">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/Lists" class="nav-link">Lists</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/Recipes" class="nav-link">Recipes</a>
+                </li>
+            </ul>
+        </div>
     </nav>
+
+    <div class="row card-row" style="margin-top:100px">
+        <div class="col-sm-6 card-col">
+            <div class="card" style=" margin:auto; ">
+                <img class="card-img-top" src="images\Floating_shopping_list.png" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title text-white">Make a List!</h5>
+                    <p class="card-text text-white">Get started by creating a new grocery list.</p>
+                    <a href="/Lists" class="btn btn-primary text-white">Make a List</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 card-col">
+            <div class="card" style=" margin:auto">
+                <img class="card-img-top" src="images\recipe_template.png" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title text-white">Search a Recipe!</h5>
+                    <p class="card-text text-white">Search for a recipe then add the ingredients directly to your list.</p>
+                    <a href="/Recipes" class="btn btn-primary text-white">Search Recipe</a>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+   
 
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
