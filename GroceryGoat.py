@@ -16,6 +16,7 @@ def main():
 
 @app.route('/Lists')
 def coupons():
+    print("Lists pressed")
     return render_template('GGLists.html')
 
 @app.route('/Recipes')
@@ -28,6 +29,7 @@ def login():
 
 @app.route('/Signup')
 def signup():
+    print("test")
     return render_template('GGSignup.html')
 
 if __name__ == '__main__':
