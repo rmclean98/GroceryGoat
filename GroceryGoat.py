@@ -17,5 +17,9 @@ def recipes():
 def login():
     return render_template('GGLogin.html')
 
+@app.route('/Signup')
+def signup():
+    return render_template('GGSignup.html')
+
 if __name__ == '__main__':
     app.run()
