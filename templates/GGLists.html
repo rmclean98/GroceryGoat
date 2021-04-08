@@ -8,16 +8,19 @@
     <link rel="stylesheet" href="style.css" />
     <style>
         
-        .my-container {
+       
+        .list-row {
             border: 1px solid black;
+            
         }
-        .my-row {
-            border: 1px solid black;
+        .list-button{
+            border-radius:0px;
+
         }
         .my-col {
             border: 1px solid black;
         }
-    
+        
         
     </style>
 
@@ -45,28 +48,26 @@
     </div>
     </nav>
 
-    <div class="container my-container">
-        <div class="row my-row">
-            <h1 class="my-headers">Lists</h1>
+    
+        
+    <div class="col-3">
+        <div class="row bg-secondary">
+            <h1 class="my-headers ">Lists</h1>
         </div>
-        <div class="row my-row">
-            <div class="col-4 my-col">
-                <ul>
-                    <li>
-                        <button class="btn btn-link">List 1</button>
-                    </li>
-                    <li>
-                        <button class="btn btn-link">List 2</button>
-                    </li>
-                    <li>
-                        <button class="btn btn-link">List 3</button>
-                    </li>
-                </ul>
-            </div>
-            <div class="col-8 my-col">
 
-            </div>
+        <div class="row list-row">
+            <button class="btn btn-secondary btn-block list-button">List 1</button>
         </div>
+        <div class="row list-row">
+            <button class="btn btn-secondary btn-block list-button">List 2</button>
+        </div>
+        <div class="row list-row">
+            <button class="btn btn-secondary btn-block list-button">List 3</button>
+        </div>
+
+       
+
+    </div>
         
 
 
