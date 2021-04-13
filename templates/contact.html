@@ -1,67 +1,209 @@
 <!DOCTYPE html>
+
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body {font-family: Arial, Helvetica, sans-serif;}
-* {box-sizing: border-box;}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css" />
 
-input[type=text], select, textarea {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-  margin-top: 6px;
-  margin-bottom: 16px;
-  resize: vertical;
-}
+    <style>
+        @import url(https://fonts.googleapis.com/css?family=Lato:100,300,400);
 
-input[type=submit] {
-  background-color: #4CAF50;
-  color: white;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
+        input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+            color: #aca49c;
+            font-size: 0.875em;
+        }
 
-input[type=submit]:hover {
-  background-color: #45a049;
-}
+        input:focus::-webkit-input-placeholder, textarea:focus::-webkit-input-placeholder {
+            color: #bbb5af;
+        }
 
-.container {
-  border-radius: 5px;
-  background-color: #f2f2f2;
-  padding: 20px;
-}
-</style>
+        input::-moz-placeholder, textarea::-moz-placeholder {
+            color: #aca49c;
+            font-size: 0.875em;
+        }
+
+        input:focus::-moz-placeholder, textarea:focus::-moz-placeholder {
+            color: #bbb5af;
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: #aca49c;
+            font-size: 0.875em;
+        }
+
+        input:focus::placeholder, textarea::focus:placeholder {
+            color: #bbb5af;
+        }
+
+        input::-ms-placeholder, textarea::-ms-placeholder {
+            color: #aca49c;
+            font-size: 0.875em;
+        }
+
+        input:focus::-ms-placeholder, textarea:focus::-ms-placeholder {
+            color: #bbb5af;
+        }
+
+        /* on hover placeholder */
+
+        input:hover::-webkit-input-placeholder, textarea:hover::-webkit-input-placeholder {
+            color: #e2dedb;
+            font-size: 0.875em;
+        }
+
+        input:hover:focus::-webkit-input-placeholder, textarea:hover:focus::-webkit-input-placeholder {
+            color: #cbc6c1;
+        }
+
+        input:hover::-moz-placeholder, textarea:hover::-moz-placeholder {
+            color: #e2dedb;
+            font-size: 0.875em;
+        }
+
+        input:hover:focus::-moz-placeholder, textarea:hover:focus::-moz-placeholder {
+            color: #cbc6c1;
+        }
+
+        input:hover::placeholder, textarea:hover::placeholder {
+            color: #e2dedb;
+            font-size: 0.875em;
+        }
+
+        input:hover:focus::placeholder, textarea:hover:focus::placeholder {
+            color: #cbc6c1;
+        }
+
+        input:hover::placeholder, textarea:hover::placeholder {
+            color: #e2dedb;
+            font-size: 0.875em;
+        }
+
+        input:hover:focus::-ms-placeholder, textarea:hover::focus:-ms-placeholder {
+            color: #cbc6c1;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background: #e2dedb;
+            color: #494949;
+        }
+
+        header {
+            position: relative;
+            margin: 100px 0 25px 0;
+            font-size: 2.3em;
+            text-align: center;
+            letter-spacing: 7px;
+        }
+
+        #form {
+            position: relative;
+            width: 500px;
+            margin: 50px auto 100px auto;
+        }
+
+        input {
+            font-family: 'Lato', sans-serif;
+            font-size: 0.875em;
+            width: 470px;
+            height: 50px;
+            padding: 0px 15px 0px 15px;
+            background: transparent;
+            outline: none;
+            color: #726659;
+            border: solid 1px #494949;
+            border-bottom: none;
+            transition: all 0.3s ease-in-out;
+            -webkit-transition: all 0.3s ease-in-out;
+            -moz-transition: all 0.3s ease-in-out;
+            -ms-transition: all 0.3s ease-in-out;
+        }
+
+            input:hover {
+                background: #494949;
+                color: #e2dedb;
+            }
+
+        textarea {
+            width: 470px;
+            max-width: 470px;
+            height: 110px;
+            max-height: 110px;
+            padding: 15px;
+            background: transparent;
+            outline: none;
+            color: #726659;
+            font-family: 'Lato', sans-serif;
+            font-size: 0.875em;
+            border: solid 1px #494949;
+            transition: all 0.3s ease-in-out;
+            -webkit-transition: all 0.3s ease-in-out;
+            -moz-transition: all 0.3s ease-in-out;
+            -ms-transition: all 0.3s ease-in-out;
+        }
+
+            textarea:hover {
+                background: #494949;
+                color: #e2dedb;
+            }
+
+        #submit {
+            width: 502px;
+            padding: 0;
+            margin: -5px 0px 0px 0px;
+            font-family: 'Lato', sans-serif;
+            font-size: 0.875em;
+            color: #b3aca7;
+            outline: none;
+            cursor: pointer;
+            border: solid 1px #b3aca7;
+            border-top: none;
+        }
+
+            #submit:hover {
+                color: #e2dedb;
+            }
+    </style>
+
+    <body>
+
+
+        <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+            <a href="/" class="navbar-brand">Grocery Goat</a>
+            <button class="navbar-toggler  ml-auto" data-toggle="collapse" data-target="#navbarMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarMenu">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a href="/Login" class="nav-link">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/Lists" class="nav-link">Lists</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/Recipes" class="nav-link">Recipes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/Contact" class="nav-link">Contact</a>
+                    </li>
+
+                </ul>
+            </div>
+        </nav>
+
+        <header> Voice Your Concerns </header>
+
+        <form id="form" class="topBefore" action="mailto:hassanh18@students.ecu.edu" method="post" class="contact100-form validate-form">
+
+
+            <input id="name" type="text" placeholder="NAME">
+            <input id="email" type="text" placeholder="E-MAIL">
+            <textarea id="message" type="text" placeholder="MESSAGE"></textarea>
+            <input id="submit" type="submit" value="GO!">
+
+        </form>
+    </body>
 </head>
-<body>
-
-<h3>Contact Form</h3>
-
-<div class="container">
-  <form action="/action_page.php">
-    <label for="fname">First Name</label>
-    <input type="text" id="fname" name="firstname" placeholder="Your name..">
-
-    <label for="lname">Last Name</label>
-    <input type="text" id="lname" name="lastname" placeholder="Your last name..">
-
-    <label for="country">Country</label>
-    <select id="country" name="country">
-      <option value="australia">Australia</option>
-      <option value="canada">Canada</option>
-      <option value="usa">USA</option>
-    </select>
-
-    <label for="subject">Subject</label>
-    <textarea id="subject" name="subject" placeholder="Write something.." style="height:200px"></textarea>
-
-    <input type="submit" value="Submit">
-  </form>
-</div>
-
-</body>
 </html>
