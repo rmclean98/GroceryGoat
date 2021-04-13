@@ -32,5 +32,9 @@ def signup():
     print("test")
     return render_template('GGSignup.html')
 
+@app.route('/Contact')
+def contact():
+    return render_template('contact.html')
+
 if __name__ == '__main__':
     app.run()
