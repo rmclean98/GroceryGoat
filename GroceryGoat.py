@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, session, redirect, url_for, g
 import os
 
 IMAGE_FOLDER = os.path.join('static', 'images')
@@ -15,6 +15,7 @@ class User:
 
 users = []
 users.append(User(id=1, firstname = 'Brandon', lastname = 'Fellenstein', email = 'fellensteinb17@students.ecu.edu', password = 'TestPass'))
+users.append(User(id=2, firstname = 'Jon', lastname = 'Doe', email = 'jondoe@gmail.com', password = 'password'))
 
 print(users)
 
@@ -23,11 +24,20 @@ app.secret_key = 'tempsecretkey'
 
 app.config['IMAGE_FOLDER'] = IMAGE_FOLDER
 
+@app.before_request
+def before_request():
+    g.user = None
+    if 'user_id' in session:
+        user = [x for x in users if x.id == session['user_id']][0]
+        g.user = user
+
 @app.route('/')
 def main():
     Floating_shopping = os.path.join(app.config['IMAGE_FOLDER'], 'Floating_shopping_list.png')
     recipe_template = os.path.join(app.config['IMAGE_FOLDER'], 'recipe_template.png')
     return render_template('GGHome.html', home_shopping_image = Floating_shopping, home_recipe_image = recipe_template)
+    if not g.user:
+        return redirect(url_for('login'))
 
 @app.route('/Lists')
 def coupons():
