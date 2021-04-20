@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, session, redirect, url_for, g
 import os
+import requests
+import json
 
 IMAGE_FOLDER = os.path.join('static', 'images')
 
