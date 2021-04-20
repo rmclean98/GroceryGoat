@@ -44,8 +44,18 @@ def coupons():
     print("Lists pressed")
     return render_template('GGLists.html')
 
-@app.route('/Recipes')
+@app.route('/Recipes', methods = ["GET", "POST"])
 def recipes():
+    if request.method == "POST":
+        recipe_input = request.form.get("search")
+        print(recipe_input)
+        allRecipes = requests.get('https://api.edamam.com/search?q=chicken&app_id=c4fad94b&app_key=67c768fc1f825a76bea9f5ca1975eb4e&from=0&to=3')
+        allRecipesDic = json.loads(allRecipes.text)
+        x = json.dumps(allRecipesDic, sort_keys=True, indent=4)
+        print(x)
+        with open('data.txt', 'w') as outfile:
+            json.dump(x, outfile)
+        return recipe_input + allRecipes.text
     return render_template('GGRecipe.html')
 
 @app.route('/Login', methods=['GET', 'POST'])
