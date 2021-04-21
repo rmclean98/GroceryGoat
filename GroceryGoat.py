@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, session, redirect, url_for, g
 import os
-import requests
 import json
 
 IMAGE_FOLDER = os.path.join('static', 'images')
@@ -83,6 +82,10 @@ def signup():
 @app.route('/Contact')
 def contact():
     return render_template('contact.html')
+
+@app.route('/Test')
+def test():
+    return render_template('test.html')
 
 if __name__ == '__main__':
     app.run()

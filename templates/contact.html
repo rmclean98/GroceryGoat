@@ -1,7 +1,6 @@
-<!DOCTYPE html>
-
-<html>
+{% extends "template.html" %}
 <head>
+	{% block head %}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="style.css" />
@@ -165,33 +164,10 @@
                 color: #e2dedb;
             }
     </style>
-
+	{% endblock %}
+</head>
     <body>
-
-
-        <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-            <a href="/" class="navbar-brand">Grocery Goat</a>
-            <button class="navbar-toggler  ml-auto" data-toggle="collapse" data-target="#navbarMenu">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarMenu">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a href="/Login" class="nav-link">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/Lists" class="nav-link">Lists</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/Recipes" class="nav-link">Recipes</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/Contact" class="nav-link">Contact</a>
-                    </li>
-
-                </ul>
-            </div>
-        </nav>
+	{% block body %}
 
         <header> Voice Your Concerns </header>
 
@@ -204,6 +180,7 @@
             <input id="submit" type="submit" value="GO!">
 
         </form>
-    </body>
-</head>
+    	{% endblock %}
+	</body>
+
 </html>
