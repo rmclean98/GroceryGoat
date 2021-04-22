@@ -51,8 +51,10 @@ def lists():
 def recipes():
     if request.method == "POST":
         recipe_input = request.form.get("search")
+        recipe_amount = request.form.get("amount")
         print(recipe_input)
-        allRecipes = requests.get('https://api.edamam.com/search?q=' + recipe_input + '&app_id=c4fad94b&app_key=67c768fc1f825a76bea9f5ca1975eb4e&from=0&to=3')
+        print(recipe_amount)
+        allRecipes = requests.get('https://api.edamam.com/search?q=' + recipe_input + '&app_id=c4fad94b&app_key=67c768fc1f825a76bea9f5ca1975eb4e&from=0')
         allRecipesDic = json.loads(allRecipes.text)
         recipeDic = allRecipesDic["hits"]
         count = 0
@@ -62,6 +64,7 @@ def recipes():
         with open('data.json', 'w') as outfile:
             json.dump(recipeDic, outfile)
         df = pd.DataFrame(recipeDic)
+        df = df.drop(labels=["digest", "totalDaily", "totalNutrients", "ingredients", "shareAs", "totalWeight", "uri"], axis=1)
         return df.to_html()
     return render_template('GGRecipe.html')
 
