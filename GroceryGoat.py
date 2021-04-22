@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, session, redirect, url_for, g, flash
 import os
 import json
+import pandas as pd
+import requests
 
 IMAGE_FOLDER = os.path.join('static', 'images')
 
@@ -50,13 +52,18 @@ def recipes():
     if request.method == "POST":
         recipe_input = request.form.get("search")
         print(recipe_input)
-        allRecipes = requests.get('https://api.edamam.com/search?q=chicken&app_id=c4fad94b&app_key=67c768fc1f825a76bea9f5ca1975eb4e&from=0&to=3')
+        allRecipes = requests.get('https://api.edamam.com/search?q=' + recipe_input + '&app_id=c4fad94b&app_key=67c768fc1f825a76bea9f5ca1975eb4e&from=0&to=3')
         allRecipesDic = json.loads(allRecipes.text)
-        x = json.dumps(allRecipesDic, sort_keys=True, indent=4)
-        print(x)
-        with open('data.txt', 'w') as outfile:
-            json.dump(x, outfile)
-        return recipe_input + allRecipes.text
+        recipeDic = allRecipesDic["hits"]
+        count = 0
+        for i in allRecipesDic["hits"]:
+        	recipeDic[count] = i["recipe"]
+        	count += 1
+        	print(i["recipe"])
+        with open('data.json', 'w') as outfile:
+            json.dump(allRecipesDic["hits"], outfile)
+        df = pd.DataFrame(recipeDic)
+        return df.to_html()
     return render_template('GGRecipe.html')
 
 @app.route('/Login', methods=['GET', 'POST'])
