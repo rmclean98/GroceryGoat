@@ -74,7 +74,12 @@ def login():
 		username = request.form['username']
 		password = request.form['password'] 
 
-		user = [x for x in users if x.email == username][0]
+		user = [x for x in users if x.email == username]
+		if len(user) > 0:
+			user = user[0]
+		else:
+			flash("Login info is incorrect", "info")
+			return redirect(url_for('login'))
 		if user and user.password == password:
 			session['user_id'] = user.id
 			return redirect(url_for('main'))
