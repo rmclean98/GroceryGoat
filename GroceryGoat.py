@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session, redirect, url_for, g
+from flask import Flask, render_template, request, session, redirect, url_for, g, flash
 import os
 import json
 import pandas as pd
@@ -43,7 +43,7 @@ def main():
         return redirect(url_for('login'))
 
 @app.route('/Lists')
-def coupons():
+def lists():
     print("Lists pressed")
     return render_template('GGLists.html')
 
@@ -73,12 +73,26 @@ def login():
 		username = request.form['username']
 		password = request.form['password'] 
 
-		user = [x for x in users if x.email == username][0]
+		user = [x for x in users if x.email == username]
+		if len(user) > 0:
+			user = user[0]
+		else:
+			flash("Login info is incorrect", "info")
+			return redirect(url_for('login'))
 		if user and user.password == password:
 			session['user_id'] = user.id
 			return redirect(url_for('main'))
 		return redirect(url_for('login'))
 	return render_template('GGLogin.html')
+
+@app.route('/Logout')
+def logout():
+	if 'user_id' in session:
+		session.pop('user_id', None)
+		flash("User logged out succesfully", "info")
+		return redirect(url_for('login'))
+	print("no user to log out")
+	return redirect(url_for('account'))
 
 @app.route('/Signup')
 def signup():
@@ -89,9 +103,9 @@ def signup():
 def contact():
     return render_template('contact.html')
 
-@app.route('/Test')
-def test():
-    return render_template('test.html')
+@app.route('/Account')
+def account():
+    return render_template('GGAccount.html')
 
 if __name__ == '__main__':
     app.run()
