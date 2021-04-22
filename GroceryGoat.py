@@ -59,9 +59,8 @@ def recipes():
         for i in allRecipesDic["hits"]:
         	recipeDic[count] = i["recipe"]
         	count += 1
-        	print(i["recipe"])
         with open('data.json', 'w') as outfile:
-            json.dump(allRecipesDic["hits"], outfile)
+            json.dump(recipeDic, outfile)
         df = pd.DataFrame(recipeDic)
         return df.to_html()
     return render_template('GGRecipe.html')
