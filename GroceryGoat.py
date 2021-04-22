@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session, redirect, url_for, g
+from flask import Flask, render_template, request, session, redirect, url_for, g, flash
 import os
 import json
 
@@ -41,7 +41,7 @@ def main():
         return redirect(url_for('login'))
 
 @app.route('/Lists')
-def coupons():
+def lists():
     print("Lists pressed")
     return render_template('GGLists.html')
 
@@ -74,6 +74,15 @@ def login():
 		return redirect(url_for('login'))
 	return render_template('GGLogin.html')
 
+@app.route('/Logout')
+def logout():
+	if 'user_id' in session:
+		session.pop('user_id', None)
+		flash("User logged out succesfully", "info")
+		return redirect(url_for('login'))
+	print("no user to log out")
+	return redirect(url_for('account'))
+
 @app.route('/Signup')
 def signup():
     print("test")
@@ -83,9 +92,9 @@ def signup():
 def contact():
     return render_template('contact.html')
 
-@app.route('/Test')
-def test():
-    return render_template('test.html')
+@app.route('/Account')
+def account():
+    return render_template('GGAccount.html')
 
 if __name__ == '__main__':
     app.run()
