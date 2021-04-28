@@ -1,10 +1,12 @@
 from flask import Flask, render_template, request, session, redirect, url_for, g, flash
+from flask_sqlalchemy import SQLAlchemy
 import os
 import json
 import pandas as pd
 import requests
 
 IMAGE_FOLDER = os.path.join('static', 'images')
+basedir = os.path.abspath(os.path.dirname(__file__))
 
 class User:
 	def __init__(self, id, firstname, lastname, email, password):
@@ -24,8 +26,16 @@ print(users)
 
 app = Flask(__name__)
 app.secret_key = 'tempsecretkey'
-
 app.config['IMAGE_FOLDER'] = IMAGE_FOLDER
+app.config['SQLALCHEMY_DATABASE_URI'] =\
+'sqlite:///' + os.path.join(basedir, 'GG.sqlite')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+from model.Model import db
+from model.Model import ListDetails
+from model.Model import GroceryLists
+from model.Model import Users
+db.create_all()
 
 @app.before_request
 def before_request():
@@ -38,9 +48,14 @@ def before_request():
 def main():
     Floating_shopping = os.path.join(app.config['IMAGE_FOLDER'], 'Floating_shopping_list.png')
     recipe_template = os.path.join(app.config['IMAGE_FOLDER'], 'recipe_template.png')
-    return render_template('GGHome.html', home_shopping_image = Floating_shopping, home_recipe_image = recipe_template)
     if not g.user:
         return redirect(url_for('login'))
+
+    x = session['user_id']
+    currentuser = Users.query.with_entities(Users.fname).filter(Users.userId==x).all()
+    for y in currentuser:
+    	currentuser = y.fname
+    return render_template('GGHome.html', home_shopping_image = Floating_shopping, home_recipe_image = recipe_template,userFName=currentuser )
 
 @app.route('/Lists')
 def lists():
@@ -75,16 +90,21 @@ def login():
 
 		username = request.form['username']
 		password = request.form['password'] 
-
-		user = [x for x in users if x.email == username]
-		if len(user) > 0:
-			user = user[0]
+		records = Users.query.with_entities(Users.userId,Users.emailId).filter(Users.emailId==username).filter(Users.password==password).all()
+		list1=[]
+		for x in records:
+			list2={}
+			list2['userId'] = x.userId
+			list2['emailId'] = x.emailId
+			list1.append(list2)
+			
+		if len(list1) > 0:
+			list1 = list1[0]
+			session['user_id'] = list1['userId']
+			return redirect(url_for('main'))
 		else:
 			flash("Login info is incorrect", "info")
 			return redirect(url_for('login'))
-		if user and user.password == password:
-			session['user_id'] = user.id
-			return redirect(url_for('main'))
 		return redirect(url_for('login'))
 	return render_template('GGLogin.html')
 
@@ -97,11 +117,19 @@ def logout():
 	print("no user to log out")
 	return redirect(url_for('account'))
 
-@app.route('/Signup')
+@app.route('/Signup', methods=['GET','POST'])
 def signup():
-    print("test")
-    return render_template('GGSignup.html')
+	if request.method == 'POST':
+		user = Users(emailId=request.form.get('email'),password=request.form.get('password'),fname=request.form.get('firstname'),lname=request.form.get('lastname'))
+		print(user)
+		db.session.add(user)
+		db.session.commit()
+		confirmMessage1='Your registration has been completed successfully!'
+		confirmMessage2='Please login with your user credentials.'
+		redirection='/'
+		return render_template('confirmation.html',confirmMessage1=confirmMessage1,confirmMessage2=confirmMessage2,redirection=redirection)
 
+	return render_template('GGSignup.html')
 @app.route('/Contact')
 def contact():
     return render_template('contact.html')
