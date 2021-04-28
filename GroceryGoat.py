@@ -67,20 +67,10 @@ def recipes():
     if request.method == "POST":
         recipe_input = request.form.get("search")
         recipe_amount = request.form.get("amount")
-        print(recipe_input)
-        print(recipe_amount)
-        allRecipes = requests.get('https://api.edamam.com/search?q=' + recipe_input + '&app_id=c4fad94b&app_key=67c768fc1f825a76bea9f5ca1975eb4e&from=0')
+        allRecipes = requests.get('https://api.edamam.com/search?q=' + recipe_input + '&app_id=c4fad94b&app_key=67c768fc1f825a76bea9f5ca1975eb4e&from=0&to=' + recipe_amount)
         allRecipesDic = json.loads(allRecipes.text)
-        recipeDic = allRecipesDic["hits"]
-        count = 0
-        for i in allRecipesDic["hits"]:
-        	recipeDic[count] = i["recipe"]
-        	count += 1
-        with open('data.json', 'w') as outfile:
-            json.dump(recipeDic, outfile)
-        df = pd.DataFrame(recipeDic)
-        df = df.drop(labels=["digest", "totalDaily", "totalNutrients", "ingredients", "shareAs", "totalWeight", "uri"], axis=1)
-        return df.to_html()
+        recipes = cleanData(allRecipesDic)
+        return render_template('GGRecipe.html',recipeLists=recipes)
     return render_template('GGRecipe.html')
 
 @app.route('/Login', methods=['GET', 'POST'])
@@ -137,6 +127,24 @@ def contact():
 @app.route('/Account')
 def account():
     return render_template('GGAccount.html')
+    
+def cleanData(recipes):
+	recipeDic = recipes["hits"]
+	count = 0
+	for i in recipes["hits"]:
+		recipeDic[count] = i["recipe"]
+		count += 1
+	with open('data.json', 'w') as outfile:
+		json.dump(recipeDic, outfile)
+	df = pd.DataFrame(recipeDic)
+	df = df.drop(labels=["digest", "totalDaily", "totalNutrients", "ingredients", "shareAs", "totalWeight", "uri"], axis=1)
+        
+	special_char = ["[", """'""", "]"]
+	df = df.astype(str)
+	for col in df.columns:
+		for char in special_char:
+			df[col] = df[col].str.replace(char,'', regex=True)
+	return df.values.tolist()
 
 if __name__ == '__main__':
     app.run()
