@@ -2,3 +2,4 @@ Flask
 pandas
 Jinja2
 flask-sqlalchemy
+pytest

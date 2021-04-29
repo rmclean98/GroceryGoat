@@ -8,17 +8,7 @@ import requests
 IMAGE_FOLDER = os.path.join('static', 'images')
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-class User:
-	def __init__(self, id, firstname, lastname, email, password):
-		self.id = id
-		self.firstname = firstname
-		self.lastname = lastname
-		self.email = email
-		self.password =  password
-	def __repr__(self):
-		return f'<User: {self.firstname} {self.lastname}>'
-
-app = Flask(__name__)
+app = Flask(__name__, instance_relative_config=True)
 app.secret_key = 'tempsecretkey'
 app.config['IMAGE_FOLDER'] = IMAGE_FOLDER
 app.config['SQLALCHEMY_DATABASE_URI'] =\
@@ -62,6 +52,13 @@ def recipes():
     if request.method == "POST":
         recipe_input = request.form.get("search")
         recipe_amount = request.form.get("amount")
+        if(recipe_input == ""):
+            alertOption="alert alert-success"
+            confirmMessage0='Search Failed'
+            confirmMessage1='Enter a value into the search box'
+            confirmMessage2=''
+            redirection='/Recipes'
+        return render_template('confirmation.html',alertOption=alertOption,confirmMessage0=confirmMessage0,confirmMessage1=confirmMessage1,confirmMessage2=confirmMessage2,redirection=redirection)
         allRecipes = requests.get('https://api.edamam.com/search?q=' + recipe_input + '&app_id=c4fad94b&app_key=67c768fc1f825a76bea9f5ca1975eb4e&from=0&to=' + recipe_amount)
         allRecipesDic = json.loads(allRecipes.text)
         recipes = cleanData(allRecipesDic)
@@ -90,10 +87,19 @@ def login():
 		if len(list1) > 0:
 			list1 = list1[0]
 			session['user_id'] = list1['userId']
-			return redirect(url_for('main'))
+			alertOption="alert alert-success"
+			confirmMessage0='Congratulations'
+			confirmMessage1='Login successfully!'
+			confirmMessage2=''
+			redirection='/Lists'
+			return render_template('confirmation.html',alertOption=alertOption,confirmMessage0=confirmMessage0,confirmMessage1=confirmMessage1,confirmMessage2=confirmMessage2,redirection=redirection)
 		else:
-			flash("Login info is incorrect", "info")
-			return redirect(url_for('login'))
+			alertOption="alert alert-danger"
+			confirmMessage0='Whoops'
+			confirmMessage1='Your login has failed!'
+			confirmMessage2='incorrect username/password.'
+			redirection='/Login'
+			return render_template('confirmation.html',alertOption=alertOption,confirmMessage0=confirmMessage0,confirmMessage1=confirmMessage1,confirmMessage2=confirmMessage2,redirection=redirection)
 		return redirect(url_for('login'))
 	return render_template('GGLogin.html')
 
@@ -101,22 +107,36 @@ def login():
 def logout():
 	if 'user_id' in session:
 		session.pop('user_id', None)
-		flash("User logged out succesfully", "info")
-		return redirect(url_for('login'))
-	print("no user to log out")
-	return redirect(url_for('account'))
+		alertOption="alert alert-success"
+		confirmMessage0='Bye have a great time'
+		confirmMessage1='You have logged out successfully!'
+		confirmMessage2='Come see us again.'
+		redirection='/Login'
+		return render_template('confirmation.html',alertOption=alertOption,confirmMessage0=confirmMessage0,confirmMessage1=confirmMessage1,confirmMessage2=confirmMessage2,redirection=redirection)
+
 
 @app.route('/Signup', methods=['GET','POST'])
 def signup():
 	if request.method == 'POST':
-		user = Users(emailId=request.form.get('email'),password=request.form.get('password'),fname=request.form.get('firstname'),lname=request.form.get('lastname'))
-		print(user)
-		db.session.add(user)
-		db.session.commit()
-		confirmMessage1='Your registration has been completed successfully!'
-		confirmMessage2='Please login with your user credentials.'
-		redirection='/'
-		return render_template('confirmation.html',confirmMessage1=confirmMessage1,confirmMessage2=confirmMessage2,redirection=redirection)
+		check = Users.query.with_entities(Users.userId).filter(Users.emailId==request.form.get('email')).all()
+		if(len(check) > 0):
+			alertOption="alert alert-danger"
+			confirmMessage0='Whoops'
+			confirmMessage1='Your account creation has failed!'
+			confirmMessage2='username is already in use.'
+			redirection='/Signup'
+			return render_template('confirmation.html',alertOption=alertOption,confirmMessage0=confirmMessage0,confirmMessage1=confirmMessage1,confirmMessage2=confirmMessage2,redirection=redirection)
+		else:
+			user = Users(emailId=request.form.get('email'),password=request.form.get('password'),fname=request.form.get('firstname'),lname=request.form.get('lastname'))
+			print(user)
+			db.session.add(user)
+			db.session.commit()
+			alertOption="alert alert-success"
+			confirmMessage0='Sheesh nice job'
+			confirmMessage1='Your registration has been completed successfully!'
+			confirmMessage2='Please login with your user credentials.'
+			redirection='/Lists'
+			return render_template('confirmation.html',alertOption=alertOption,confirmMessage0=confirmMessage0,confirmMessage1=confirmMessage1,confirmMessage2=confirmMessage2,redirection=redirection)
 
 	return render_template('GGSignup.html')
 @app.route('/Contact')
