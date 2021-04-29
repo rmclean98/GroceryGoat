@@ -1,4 +1,15 @@
 {% extends "template.html" %}
+<head>
+{% block head%}
+<style>
+thead > tr > th {
+  background-color: #cce;
+  font-size: 18px;
+  border-bottom: 2px solid #999;
+}
+</style>
+{% endblock%}
+</head>
 <body>
 	{% block body %}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -32,17 +43,14 @@
       {% else %}
       <H2>Recipes:</H2> 
     <div class="table-responsive" id="dataTablediv1"> 
-      <table class="table table-striped table-bordered" id="dataTable1">
+      <table class="table table-striped table-bordered" sytle="border-collapse: collapse;"id="dataTable1">
       <thead>
        <tr>
-       <caption style='background-color:rgb(156, 151, 223)'>
-         </caption>
        </tr>
 	   </thead>
 	   
-	   
-	   <tbody>
 	   {% for level1 in recipeLists %}
+	   <tbody>
        <tr>        
          <!-- <th>Index</th> -->
         <th>Recipe Title</th>
@@ -50,15 +58,15 @@
 		</tr>
 		
 		<tr>   
-        <th>Recipe Image</th>
-		<td><img src={{level1[1]}}></td>
+        <th><img src={{level1[1]}}>
+        Recipe Source:<a href={{level1[3]}}>{{level1[2]}}</a>
+        </th>
+		<td>Ingredients:<ul>{% for i in ingredients %}
+		<li>{{i}}</li>
+			{% endfor %}
+			</ul></td>
 		</tr>   
-
-		
-		<tr>   
-        <th>Recipe Source</th>
-		<td><a href={{level1[3]}}>{{level1[2]}}</a></td>
-		</tr>   
+ 
 		
 		<tr>   
         <th>Servings</th>
@@ -72,18 +80,16 @@
 		
 		<tr>   
         <th>Health labels</th>
-		<td>{{level1[6]}} </td>
+		<td><ul>{% for i in healthlabel %}
+		<li>{{i}}</li>
+			{% endfor %}
+			</ul></td>
 		</tr> 
 		
 		<tr>   
         <th>Cautions</th>
 		<td>{{level1[7]}} </td>
 		</tr> 
-		
-		<tr>   
-        <th>Ingredients</th>
-		<td>{{level1[8]}} </td>
-		</tr>
 		
 		<tr>   
         <th>Calories</th>

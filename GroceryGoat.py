@@ -18,12 +18,6 @@ class User:
 	def __repr__(self):
 		return f'<User: {self.firstname} {self.lastname}>'
 
-users = []
-users.append(User(id=1, firstname = 'Brandon', lastname = 'Fellenstein', email = 'fellensteinb17@students.ecu.edu', password = 'TestPass'))
-users.append(User(id=2, firstname = 'Jon', lastname = 'Doe', email = 'jondoe@gmail.com', password = 'password'))
-
-print(users)
-
 app = Flask(__name__)
 app.secret_key = 'tempsecretkey'
 app.config['IMAGE_FOLDER'] = IMAGE_FOLDER
@@ -41,15 +35,16 @@ db.create_all()
 def before_request():
     g.user = None
     if 'user_id' in session:
-        user = [x for x in users if x.id == session['user_id']][0]
-        g.user = user
+        #user = [x for x in users if x.id == session['user_id']]
+        g.user = session['user_id']
+        print(g.user)
 
 @app.route('/')
 def main():
-    Floating_shopping = os.path.join(app.config['IMAGE_FOLDER'], 'Floating_shopping_list.png')
-    recipe_template = os.path.join(app.config['IMAGE_FOLDER'], 'recipe_template.png')
     if not g.user:
         return redirect(url_for('login'))
+    Floating_shopping = os.path.join(app.config['IMAGE_FOLDER'], 'Floating_shopping_list.png')
+    recipe_template = os.path.join(app.config['IMAGE_FOLDER'], 'recipe_template.png')
 
     x = session['user_id']
     currentuser = Users.query.with_entities(Users.fname).filter(Users.userId==x).all()
@@ -70,7 +65,10 @@ def recipes():
         allRecipes = requests.get('https://api.edamam.com/search?q=' + recipe_input + '&app_id=c4fad94b&app_key=67c768fc1f825a76bea9f5ca1975eb4e&from=0&to=' + recipe_amount)
         allRecipesDic = json.loads(allRecipes.text)
         recipes = cleanData(allRecipesDic)
-        return render_template('GGRecipe.html',recipeLists=recipes)
+        ingredients = recipes[0][8].split(', ')
+        healthlabel = recipes[0][6].split(', ')
+        print(ingredients)
+        return render_template('GGRecipe.html',recipeLists=recipes, ingredients=ingredients,healthlabel=healthlabel)
     return render_template('GGRecipe.html')
 
 @app.route('/Login', methods=['GET', 'POST'])
@@ -86,6 +84,7 @@ def login():
 			list2={}
 			list2['userId'] = x.userId
 			list2['emailId'] = x.emailId
+			
 			list1.append(list2)
 			
 		if len(list1) > 0:
