@@ -49,21 +49,28 @@ def main():
 @app.route('/addList', methods=['POST'])
 def addList():
 	x = session['user_id']
-	list = ListDetails(listTitle=request.form.get('listname'),userId=x)
+	ln = request.form.get('listname')
+	list = ListDetails(listTitle=ln,userId=x)
 	db.session.add(list)
+	db.session.commit()
+	newlistId = ListDetails.query.with_entities(ListDetails.listId).filter_by(ListDetails.userId==x).filter_by(ListDetails.listTitle==ln)
+	placeholder = Todo(listId=newlistId)
+	db.session.add(placeholder)
 	db.session.commit()
 	return redirect(url_for('lists'))
 
 @app.route('/showList/<listId>')
 def showList(listId):
 	print(listId)
-	
-	return redirect(url_for('lists'))
+	incomplete = Todo.query.filter_by(complete=False).filter_by().all()
+	complete = Todo.query.filter_by(complete=True).all()
+	return render_template('GGLists.html', incomplete=incomplete, complete=complete,lists = users_lists)
 
 	
 
 @app.route('/addItem', methods=['POST'])
-def addItem():
+def addItem(listId):
+	x = session['user_id']
 	todo = Todo(text=request.form['todoitem'], complete=False)
 	db.session.add(todo)
 	db.session.commit()

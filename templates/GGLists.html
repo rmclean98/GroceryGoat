@@ -46,7 +46,9 @@
                 </form>
                 {% for item in lists %}
                 <div class="row">
-                        <button class="btn btn-dark">{{ item[1] }} </button>
+                    <a href="{{ url_for('showList', listId=item.listId ) }}">    
+                        <button class="btn btn-dark" >{{ item.listTitle }} </button>
+                    </a>
                 </div>
 				{% endfor %}
 
