@@ -9,7 +9,7 @@ class Users(db.Model):
 	emailId = db.Column(db.String(50), unique = True, nullable=False)    
 	password = db.Column(db.String(16), nullable=False)
 	fname = db.Column(db.String(50), nullable=False)     
-	lname = db.Column(db.String(50), nullable=False)  
+	lname = db.Column(db.String(50), nullable=False) 
 
 
 class ListDetails(db.Model):
