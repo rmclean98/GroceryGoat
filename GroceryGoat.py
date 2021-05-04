@@ -30,7 +30,7 @@ def before_request():
     if 'user_id' in session:
         #user = [x for x in users if x.id == session['user_id']]
         g.user = session['user_id']
-        print(g.user)
+        
 
 @app.route('/')
 @app.route('/index')
@@ -54,6 +54,14 @@ def addList():
 	db.session.commit()
 	return redirect(url_for('lists'))
 
+@app.route('/showList/<listId>')
+def showList(listId):
+	print(listId)
+	
+	return redirect(url_for('lists'))
+
+	
+
 @app.route('/addItem', methods=['POST'])
 def addItem():
 	todo = Todo(text=request.form['todoitem'], complete=False)
@@ -69,15 +77,16 @@ def lists():
 		listsname = []
 		users_lists = ListDetails.query.with_entities(ListDetails.userId, ListDetails.listTitle,ListDetails.listId).filter(ListDetails.userId==x).all()
 		for user in users_lists:
-			print(user.listTitle)
-			listsname.append(user.listTitle.replace("""'""", ''))
-		print(listsname)
+			#print(user.listTitle)
+			listsname.append(user.listId)
+			listsname.append(user.listTitle)
+		
 		if len(users_lists)==0:
 			print('user has no lists')
-			incomplete = Todo.query.filter_by(complete=False).all()
-			complete = Todo.query.filter_by(complete=True).all()
+			incomplete = ListDetails.query.filter_by(complete=False).all()
+			complete = ListDetails.query.filter_by(complete=True).all()
 			return render_template('GGLists.html', incomplete=incomplete, complete=complete,lists = users_lists)
-		incomplete = Todo.query.filter_by(complete=False).all()
+		incomplete = Todo.query.filter_by(complete=False).filter_by().all()
 		complete = Todo.query.filter_by(complete=True).all()
 		return render_template('GGLists.html', incomplete=incomplete, complete=complete,lists = users_lists)
 	return redirect(url_for('login'))
