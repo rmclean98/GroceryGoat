@@ -59,7 +59,7 @@ def add():
 def lists():
 	if 'user_id' in session:
 		x = session['user_id']
-		users_lists = ListDetails.query.filter_by(ListDetails.userId=x)
+		users_lists = ListDetails.query.with_entities(ListDetails.userId).filter(ListDetails.userId==x).all()
 		if len(users_lists)==0:
 			print('user has no lists')
 			return render_template('GGLists.html', incomplete=incomplete, complete=complete)
