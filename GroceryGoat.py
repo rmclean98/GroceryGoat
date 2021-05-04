@@ -65,6 +65,8 @@ def lists():
 		users_lists = ListDetails.query.with_entities(ListDetails.userId).filter(ListDetails.userId==u_id).all()
 		if len(users_lists)==0:
 			print('user has no lists')
+			incomplete = Todo.query.filter_by(complete=False).all()
+			complete = Todo.query.filter_by(complete=True).all()
 			return render_template('GGLists.html', incomplete=incomplete, complete=complete)
 		incomplete = Todo.query.filter_by(complete=False).all()
 		complete = Todo.query.filter_by(complete=True).all()
