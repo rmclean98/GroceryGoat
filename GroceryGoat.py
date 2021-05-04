@@ -61,22 +61,24 @@ def addList():
 
 @app.route('/showList/<listId>')
 def showList(listId):
-	print(listId)
-	incomplete = Todo.query.filter_by(complete=False).filter_by().all()
-	complete = Todo.query.filter_by(complete=True).all()
-	return render_template('GGLists.html', incomplete=incomplete, complete=complete,lists = users_lists, listId=listId)
+	
+	#incomplete = Todo.query.with_entities(Todo).filter(complete=False).all()
+	#complete = Todo.query.filter(complete=True).all()
+	return render_template('GGLists.html', incomplete=incomplete, complete=complete,lists = users_lists, listId=listsname[0])
 
 	
 
-@app.route('/addItem', methods=['POST'])
+@app.route('/addItem/<listId>', methods=['POST'])
 def addItem(listId):
-	if(listId == None):
+	if(int(listId) == 0):
+		print("not in here ")
 		return redirect(url_for('lists'))
-	x = session['user_id']
-	todo = Todo(listId=listId, text=request.form['todoitem'], complete=False)
-	db.session.add(todo)
-	db.session.commit()
-	return redirect(url_for('lists'))
+	else:
+		print("here")
+		todo = Todo(listId=listId, text=request.form['todoitem'], complete=False)
+		db.session.add(todo)
+		db.session.commit()
+	return showList(listId)
 
 
 @app.route('/Lists')
@@ -85,19 +87,19 @@ def lists():
 		x = session['user_id']
 		listsname = []
 		users_lists = ListDetails.query.with_entities(ListDetails.userId, ListDetails.listTitle,ListDetails.listId).filter(ListDetails.userId==x).all()
+		print(users_lists[0].listId)
 		for user in users_lists:
 			#print(user.listTitle)
 			listsname.append(user.listId)
 			listsname.append(user.listTitle)
 		if len(users_lists)==0:
-			listID=0
 			print('user has no lists')
 			incomplete = Todo.query.filter_by(complete=False).all()
 			complete = Todo.query.filter_by(complete=True).all()
-			return render_template('GGLists.html', incomplete=incomplete, complete=complete,lists = users_lists, listId=None)
+			return render_template('GGLists.html', incomplete=incomplete, complete=complete,lists=users_lists, listId=0)
 		incomplete = Todo.query.filter_by(complete=False).filter_by().all()
 		complete = Todo.query.filter_by(complete=True).all()
-		return render_template('GGLists.html', incomplete=incomplete, complete=complete,lists = users_lists, listId=listsname[0])
+		return render_template('GGLists.html', incomplete=incomplete, complete=complete,lists = users_lists, listId=users_lists[0].listId)
 	return redirect(url_for('login'))
 
 @app.route('/complete/<id>')
@@ -191,7 +193,8 @@ def signup():
 			redirection='/Signup'
 			return render_template('confirmation.html',alertOption=alertOption,confirmMessage0=confirmMessage0,confirmMessage1=confirmMessage1,confirmMessage2=confirmMessage2,redirection=redirection)
 		else:
-			user = Users(emailId=request.form.get('email'),password=request.form.get('password'),fname=request.form.get('firstname'),lname=request.form.get('lastname'))
+			uEmail = request.form.get('email')
+			user = Users(emailId=uEmail,password=request.form.get('password'),fname=request.form.get('firstname'),lname=request.form.get('lastname'))
 			print(user)
 			db.session.add(user)
 			db.session.commit()
@@ -200,7 +203,10 @@ def signup():
 			confirmMessage1='Your registration has been completed successfully!'
 			confirmMessage2='Please login with your user credentials.'
 			redirection='/Lists'
-			#session['user_id'] = Users.query.with_entities(Users.userId,Users.emailId).filter(Users.emailId==username).filter(Users.password==password).all()
+			newUser = Users.query.with_entities(Users.userId).filter(Users.emailId==uEmail).all()
+			for i in newUser:
+				k = i.userId
+			session['user_id'] = k
 			return render_template('confirmation.html',alertOption=alertOption,confirmMessage0=confirmMessage0,confirmMessage1=confirmMessage1,confirmMessage2=confirmMessage2,redirection=redirection)
 
 	return render_template('GGSignup.html')
