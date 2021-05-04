@@ -35,11 +35,20 @@
 </head>
 <body>
     {% block body %}
-
     <div class="col-3">
         <div>
-            Add a new todo item:
-            <form action="{{ url_for('add') }}" method="POST">
+            Create a new list
+            <form action="{{ url_for('addList') }}" method="POST">
+                <input type="text" name="listname" placeholder="list name">
+                <input type="submit" value="Create list" class="btn btn-primary">
+            </form>
+        </div>
+    
+    </div>
+    <div class="col-9">
+        <div>
+            Add a new item
+            <form action="{{ url_for('addItem') }}" method="POST">
                 <input type="text" name="todoitem">
                 <input type="submit" value="Add Item" class="btn btn-primary">
             </form>

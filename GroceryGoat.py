@@ -46,9 +46,12 @@ def main():
     	currentuser = y.fname
     return render_template('GGHome.html', home_shopping_image = Floating_shopping, home_recipe_image = recipe_template,userFName=currentuser )
 
+@app.route('/addList', methods=['POST'])
+def addList():
+	return redirect(url_for('lists'))
 
-@app.route('/add', methods=['POST'])
-def add():
+@app.route('/addItem', methods=['POST'])
+def addItem():
 	todo = Todo(text=request.form['todoitem'], complete=False)
 	db.session.add(todo)
 	db.session.commit()
@@ -59,10 +62,10 @@ def add():
 def lists():
 	if 'user_id' in session:
 		x = session['user_id']
-		currentuser = Users.query.with_entities(Users.userId).filter(Users.userId==x).all()
-		for y in currentuser:
-			u_id = y.userId
-		users_lists = ListDetails.query.with_entities(ListDetails.userId).filter(ListDetails.userId==u_id).all()
+		#currentuser = Users.query.with_entities(Users.userId).filter(Users.userId==x).all()
+		#for y in currentuser:
+		#	u_id = y.userId
+		users_lists = ListDetails.query.with_entities(ListDetails.userId).filter(ListDetails.userId==x).all()
 		if len(users_lists)==0:
 			print('user has no lists')
 			incomplete = Todo.query.filter_by(complete=False).all()
