@@ -5,7 +5,7 @@ import json
 import pandas as pd
 import requests
 from app import app
-from app.models import Todo
+
 
 IMAGE_FOLDER = os.path.join('static', 'images')
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -21,6 +21,7 @@ from model.Model import db
 from model.Model import ListDetails
 from model.Model import GroceryLists
 from model.Model import Users
+from model.Model import Todo
 db.create_all()
 
 @app.before_request
@@ -56,7 +57,9 @@ def add():
 
 @app.route('/Lists')
 def lists():
-    print("Lists pressed")
+    if not g.user:
+        return redirect(url_for('login'))
+
     incomplete = Todo.query.filter_by(complete=False).all()
     complete = Todo.query.filter_by(complete=True).all()
     return render_template('GGLists.html', incomplete=incomplete, complete=complete)
@@ -78,12 +81,11 @@ def recipes():
         recipe_input = request.form.get("search")
         recipe_amount = request.form.get("amount")
         if(recipe_input == ""):
-            alertOption="alert alert-success"
             confirmMessage0='Search Failed'
             confirmMessage1='Enter a value into the search box'
             confirmMessage2=''
             redirection='/Recipes'
-        return render_template('confirmation.html',alertOption=alertOption,confirmMessage0=confirmMessage0,confirmMessage1=confirmMessage1,confirmMessage2=confirmMessage2,redirection=redirection)
+        return render_template('confirmation.html',confirmMessage0=confirmMessage0,confirmMessage1=confirmMessage1,confirmMessage2=confirmMessage2,redirection=redirection)
         allRecipes = requests.get('https://api.edamam.com/search?q=' + recipe_input + '&app_id=c4fad94b&app_key=67c768fc1f825a76bea9f5ca1975eb4e&from=0&to=' + recipe_amount)
         allRecipesDic = json.loads(allRecipes.text)
         recipes = cleanData(allRecipesDic)

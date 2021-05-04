@@ -26,7 +26,13 @@ class GroceryLists(db.Model):
 	userId = db.Column(db.Integer, db.ForeignKey('Users.userId'))
 
     
-
+class Todo(db.Model):
+	__tablename__ = 'Todo'
+	id = db.Column(db.Integer, primary_key=True)
+	text = db.Column(db.String(200))
+	complete = db.Column(db.Boolean)
+	def __repr__(self):
+		return self.text
 
     
 

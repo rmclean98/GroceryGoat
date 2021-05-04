@@ -1,68 +1,73 @@
-<!DOCTYPE html> 
-<html lang="en"> 
+{% extends "template.html" %}
 
 <head>
+    {% block head %}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <style>        
-       
+    <style>
+
         .list-row {
             border: 1px solid black;
-            
         }
-        .list-button{
-            border-radius:0px;
 
+        .list-button {
+            border-radius: 0px;
         }
+
         .my-col {
             border: 1px solid black;
         }
-        body{ 
-    background:rgb(255, 255, 255); 
-    color:rgb(117, 117, 117); 
-    margin-top: 5px; 
-} 
-.button{ 
-    color:rgb(44, 44, 44); 
-} 
-.mark{font-size: 10px;} 
-        
-        
+
+        body {
+            background: rgb(255, 255, 255);
+            color: rgb(117, 117, 117);
+            margin-top: 5px;
+        }
+
+        .button {
+            color: rgb(44, 44, 44);
+        }
+
+        .mark {
+            font-size: 10px;
+        }
     </style>
-    
+    {% endblock %}
 </head>
-<body>  
-    
-    
+<body>
+    {% block body %}
+
     <div class="col-3">
-        <div>Add a new todo item: 
-            <form action="{{ url_for('add') }}" method="POST"> 
-                <input type="text" name="todoitem"> 
-                <input type="submit" value="Add Item" class="button"> 
-            </form> 
-        </div> 
-        <div> 
-            <h2>Incomplete Items</h2> 
-            <ul> 
-                {% for todo in incomplete %} 
-                <li style="font-size: 30pt" class='mark'>{{ todo.text }} <a href="{{ url_for('complete', id=todo.id) }}">Mark As Complete</a></li> 
-                {% endfor %}     
-            </ul> 
-            <h2>Completed Items</h2> 
-            <ul> 
-                {% for todo in complete %} 
-                <li style="font-size: 30pt">{{ todo.text }}</li> 
-                {% endfor %} 
-            </ul> 
+        <div>
+            Add a new todo item:
+            <form action="{{ url_for('add') }}" method="POST">
+                <input type="text" name="todoitem">
+                <input type="submit" value="Add Item" class="btn btn-primary">
+            </form>
         </div>
+        <div>
+            <h2>Incomplete Items</h2>
+            <ul>
+                {% for todo in incomplete %}
+                <li style="font-size: 30pt" class='mark'>{{ todo.text }} <a href="{{ url_for('complete', id=todo.id) }}">Mark As Complete</a></li>
+                {% endfor %}
+            </ul>
+            <h2>Completed Items</h2>
+            <ul>
+                {% for todo in complete %}
+                <li style="font-size: 30pt">{{ todo.text }}</li>
+                {% endfor %}
+            </ul>
         </div>
-           
     </div>
-    
+
+    </div>
+
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    {% endblock %}
 </body>
-</html> 
+
 
 
 
