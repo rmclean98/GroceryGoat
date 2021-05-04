@@ -44,12 +44,11 @@
                     <input type="text" name="listname" placeholder="list name">
                     <input type="submit" value="Create list" class="btn btn-primary">
                 </form>
+                {% for item in lists %}
                 <div class="row">
-                    {% for item in lists %}
-                        <button class="btn btn-dark">{{ item.listTitle }} </button>
-                    {% endfor %}
+                        <button class="btn btn-dark">{{ item[1] }} </button>
                 </div>
-
+				{% endfor %}
 
             </div>
     

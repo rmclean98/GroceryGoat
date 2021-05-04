@@ -66,10 +66,12 @@ def addItem():
 def lists():
 	if 'user_id' in session:
 		x = session['user_id']
-		#currentuser = Users.query.with_entities(Users.userId).filter(Users.userId==x).all()
-		#for y in currentuser:
-		#	u_id = y.userId
-		users_lists = ListDetails.query.with_entities(ListDetails.userId).filter(ListDetails.userId==x).all()
+		listsname = []
+		users_lists = ListDetails.query.with_entities(ListDetails.userId, ListDetails.listTitle,ListDetails.listId).filter(ListDetails.userId==x).all()
+		for user in users_lists:
+			print(user.listTitle)
+			listsname.append(user.listTitle.replace("""'""", ''))
+		print(listsname)
 		if len(users_lists)==0:
 			print('user has no lists')
 			incomplete = Todo.query.filter_by(complete=False).all()
@@ -211,4 +213,4 @@ def cleanData(recipes):
 	return df.values.tolist()
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug = True)
