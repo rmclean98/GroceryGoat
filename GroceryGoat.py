@@ -48,6 +48,10 @@ def main():
 
 @app.route('/addList', methods=['POST'])
 def addList():
+	x = session['user_id']
+	list = ListDetails(listTitle=request.form.get('listname'),userId=x)
+	db.session.add(list)
+	db.session.commit()
 	return redirect(url_for('lists'))
 
 @app.route('/addItem', methods=['POST'])
@@ -70,10 +74,10 @@ def lists():
 			print('user has no lists')
 			incomplete = Todo.query.filter_by(complete=False).all()
 			complete = Todo.query.filter_by(complete=True).all()
-			return render_template('GGLists.html', incomplete=incomplete, complete=complete)
+			return render_template('GGLists.html', incomplete=incomplete, complete=complete,lists = users_lists)
 		incomplete = Todo.query.filter_by(complete=False).all()
 		complete = Todo.query.filter_by(complete=True).all()
-		return render_template('GGLists.html', incomplete=incomplete, complete=complete)
+		return render_template('GGLists.html', incomplete=incomplete, complete=complete,lists = users_lists)
 	return redirect(url_for('login'))
 
 @app.route('/complete/<id>')
