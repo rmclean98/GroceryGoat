@@ -58,6 +58,11 @@ def add():
 @app.route('/Lists')
 def lists():
 	if 'user_id' in session:
+		x = session['user_id']
+		users_lists = ListDetails.query.filter_by(ListDetails.userId==x)
+		if len(users_lists)==0:
+			print('user has no lists')
+			return render_template('GGLists.html', incomplete=incomplete, complete=complete)
 		incomplete = Todo.query.filter_by(complete=False).all()
 		complete = Todo.query.filter_by(complete=True).all()
 		return render_template('GGLists.html', incomplete=incomplete, complete=complete)
@@ -163,6 +168,7 @@ def signup():
 			confirmMessage1='Your registration has been completed successfully!'
 			confirmMessage2='Please login with your user credentials.'
 			redirection='/Lists'
+			#session['user_id'] = Users.query.with_entities(Users.userId,Users.emailId).filter(Users.emailId==username).filter(Users.password==password).all()
 			return render_template('confirmation.html',alertOption=alertOption,confirmMessage0=confirmMessage0,confirmMessage1=confirmMessage1,confirmMessage2=confirmMessage2,redirection=redirection)
 
 	return render_template('GGSignup.html')
