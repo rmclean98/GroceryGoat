@@ -61,6 +61,7 @@ def lists():
 		incomplete = Todo.query.filter_by(complete=False).all()
 		complete = Todo.query.filter_by(complete=True).all()
 		return render_template('GGLists.html', incomplete=incomplete, complete=complete)
+	return redirect(url_for('login'))
 
 @app.route('/complete/<id>')
 def complete(id):
