@@ -53,7 +53,7 @@ def addList():
 	list = ListDetails(listTitle=ln,userId=x)
 	db.session.add(list)
 	db.session.commit()
-	newlistId = ListDetails.query.with_entities(ListDetails.listId).filter_by(ListDetails.userId==x).filter_by(ListDetails.listTitle==ln)
+	newlistId = ListDetails.query.with_entities(ListDetails.listId).filter(ListDetails.userId==x).filter(ListDetails.listTitle==ln)
 	placeholder = Todo(listId=newlistId)
 	db.session.add(placeholder)
 	db.session.commit()
