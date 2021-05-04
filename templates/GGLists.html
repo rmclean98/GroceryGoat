@@ -35,7 +35,7 @@
 </head>
 <body>
     {% block body %}
-    <div class="col-3">
+    <div class="col-md-3">
         <div>
             <h2>Lists</h2>
             Create a new list
@@ -53,7 +53,7 @@
         </div>
     
     </div>
-    <div class="col-9">
+    <div class="col-md-9">
         <div>
             Add a new item
             <form action="{{ url_for('addItem') }}" method="POST">
