@@ -2,63 +2,64 @@
 
 <body>
     {% block body %}   
-    <div class="h-100 row" >    
-        <div class="h-100 col-md-3" style="background-color: rgba(223, 223, 223, 0.377);">
-            <div style="margin-left: 20px;">
-                <h2>Lists</h2>
-                Create a new list
-                <form action="{{ url_for('addList') }}" method="POST">
-                    <input type="text" name="listname" placeholder="list name">
-                    <input type="submit" value="Create list" class="btn btn-primary">
-                </form>
-                {% for item in lists %}
-                <div class="row my-lists"style="padding:5px;">
-                    <a href="{{ url_for('showList', listId=item.listId ) }}">
-                        {% if currentID == item.listId  %}    
-                        <button class="btn btn-primary">{{ item.listTitle }} </button>
-                        {% else %}
-                        <button class="btn btn-dark" >{{ item.listTitle }} </button>
-                        {% endif %}
-                    </a>
-                    <a href="{{ url_for('delList', listId=item.listId ) }}">    
-                        <button class="btn btn-danger" style="margin-left: 4px;"> Delete</button> 
-                    </a>
-                </div>
-                {% endfor %}
-
-            </div>
-    
-        </div>
-        {% if currentID == 0%}
-
-        {% else %}
-        <div class="col-md-9">
-            <div>
-                <h2>Add a new item</h2>
-                <form action="{{ url_for('addItem', listId=currentID) }}" method="POST">
-                
-                    <input type="text" name="todoitem" placeholder="Item name">
-                    <input type="submit" value="Add Item" class="btn btn-primary">
-                </form>
-            </div>
-            <div>
-                <h2>{{ listId }}</h2>
-                <ul>
-                    {% for todo in status %}
-                        {% if todo.complete == False%}
-                            <li style="font-size: 30pt" ><a href="{{ url_for('complete', id=todo['id']) }}">{{ todo.text }} </a></li>
-                        {% else %}
-                            <li style="font-size: 30pt"> <a href="{{ url_for('complete', id=todo['id']) }}"><del>{{ todo.text }}</a></del></li>
-                        {% endif %}
+    <div class="container-fluid h-100">
+        <div class="row">    
+            <div class="col-md-3" style="background-color: rgba(223, 223, 223, 0.377);">
+                <div style="margin-left: 20px;">
+                    <h2>Lists</h2>
+                    Create a new list
+                    <form action="{{ url_for('addList') }}" method="POST">
+                        <input type="text" name="listname" placeholder="list name">
+                        <input type="submit" value="Create list" class="btn btn-primary">
+                    </form>
+                    {% for item in lists %}
+                    <div class="row my-lists"style="padding:5px;">
+                        <a href="{{ url_for('showList', listId=item.listId ) }}">
+                            {% if currentID == item.listId  %}    
+                            <button class="btn btn-primary">{{ item.listTitle }} </button>
+                            {% else %}
+                            <button class="btn btn-dark" >{{ item.listTitle }} </button>
+                            {% endif %}
+                        </a>
+                        <a href="{{ url_for('delList', listId=item.listId ) }}">    
+                            <button class="btn btn-danger" style="margin-left: 4px;"> Delete</button> 
+                        </a>
+                    </div>
                     {% endfor %}
-                </ul>
-                
-                
+
+                </div>
+        
             </div>
+            {% if currentID == 0%}
+
+            {% else %}
+            <div class="col-md-9">
+                <div>
+                    <h2>Add a new item</h2>
+                    <form action="{{ url_for('addItem', listId=currentID) }}" method="POST">
+                    
+                        <input type="text" name="todoitem" placeholder="Item name">
+                        <input type="submit" value="Add Item" class="btn btn-primary">
+                    </form>
+                </div>
+                <div>
+                    <h2>{{ listId }}</h2>
+                    <ul>
+                        {% for todo in status %}
+                            {% if todo.complete == False%}
+                                <li style="font-size: 30pt" ><a href="{{ url_for('complete', id=todo['id']) }}">{{ todo.text }} </a></li>
+                            {% else %}
+                                <li style="font-size: 30pt"> <a href="{{ url_for('complete', id=todo['id']) }}"><del>{{ todo.text }}</a></del></li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                    
+                    
+                </div>
+            </div>
+            {% endif %}
         </div>
-        {% endif %}
     </div>
-    
     
     {% endblock %}
 </body>
