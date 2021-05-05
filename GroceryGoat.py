@@ -127,7 +127,8 @@ def addToList(ing, id):
 	todo = Todo.query.filter(Todo.id==id).first()
 	tmp = None
 	for p in data[int(ing)]['ingredients']:
-		if(tmp is not p['text']):
+		print(tmp, p['text'])
+		if(tmp != p['text']):
 			tmp = p['text']
 			newing = Todo(listId=id, text=p['text'], complete=False)
 			db.session.add(newing)
