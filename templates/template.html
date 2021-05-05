@@ -2,16 +2,22 @@
 <html lang="en">
 <head>
     	{% block head %}
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha3>
     <link rel="stylesheet" href="style.css" />
+    <style>
+        html,body {
+            height: 100%;
+    background: linear-gradient(to bottom right, #66ff33 0%, #658506 90%);
+}
+    </style>
 	{% endblock %}
 </head>
 <body>
 	{% block navbar %}
-
+    
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
         <a href="/" class="navbar-brand">Grocery Goat</a>
         <button class="navbar-toggler  ml-auto" data-toggle="collapse" data-target="#navbarMenu">
@@ -44,9 +50,9 @@
     </nav>
 	{% endblock %}
 	{% block body %}
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbg>        
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbg">        
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U">
 	{% endblock %}
 </body>
 

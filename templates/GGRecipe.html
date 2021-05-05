@@ -7,12 +7,17 @@ thead > tr > th {
   font-size: 18px;
   border-bottom: 2px solid #999;
 }
+html,body {
+            height: 100%;
+    background: linear-gradient(to bottom right, #66ff33 0%, #658506 90%);
+}
 </style>
 {% endblock%}
 </head>
 <body>
 	{% block body %}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <h1 style="padding-top: 10px; padding-bottom:10px; text-align: center;">Find A Recipe</h1>
     <form action="" style="width: 500px; margin:auto" method="POST">
 
         <div class="form-group">
@@ -49,20 +54,31 @@ thead > tr > th {
        </tr>
 	   </thead>
 	   
-	   {% for level1 in recipeLists %}
+	   {% for i in range(0, recipeLists|length) %}
 	   <tbody>
        <tr>        
          <!-- <th>Index</th> -->
         <th>Recipe Title</th>
-		<td>{{level1[0]}} </td>
+		<td>{{recipeLists[i][0]}}
+            <div class="dropdown show">
+                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Add To List
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                  {%for name in userslist%}
+                  <a class="dropdown-item" href="{{ url_for('addToList', ing=i, id=name.listId ) }}">{{name.listTitle}}</a>
+                  {% endfor %}
+                </div>
+              </div>    
+        </td>
 		</tr>
 		
 		<tr>   
-        <th><img src={{level1[1]}}>
-        Recipe Source:<a href={{level1[3]}}>{{level1[2]}}</a>
+        <th><img src={{recipeLists[i][1]}}>
+        Recipe Source:<a href={{recipeLists[i][3]}}>{{recipeLists[i][2]}}</a>
         </th>
-		<td>Ingredients:<ul>{% for i in ingredients %}
-		<li>{{i}}</li>
+		<td>Ingredients:<ul>{% for j in recipeLists[i][8] %}
+		<li>{{j}}</li>
 			{% endfor %}
 			</ul></td>
 		</tr>   
@@ -70,50 +86,50 @@ thead > tr > th {
 		
 		<tr>   
         <th>Servings</th>
-		<td>{{level1[4]}} </td>
+		<td>{{recipeLists[i][4]}} </td>
 		</tr>   
 		
 		<tr>   
         <th>Diet Labels</th>
-		<td>{{level1[5]}} </td>
+		<td>{{recipeLists[i][5]}} </td>
 		</tr>   
 		
 		<tr>   
         <th>Health labels</th>
-		<td><ul>{% for i in healthlabel %}
-		<li>{{i}}</li>
+		<td><ul>{% for k in recipeLists[i][6] %}
+		<li>{{k}}</li>
 			{% endfor %}
 			</ul></td>
 		</tr> 
 		
 		<tr>   
         <th>Cautions</th>
-		<td>{{level1[7]}} </td>
+		<td>{{recipeLists[i][7]}} </td>
 		</tr> 
 		
 		<tr>   
         <th>Calories</th>
-		<td>{{level1[9]}} </td>
+		<td>{{recipeLists[i][9]}} </td>
 		</tr>
 		
 		<tr>   
         <th>Cooking Time</th>
-		<td>{{level1[10]}} Minutes</td>
+		<td>{{recipeLists[i][10]}} Minutes</td>
 		</tr>
 		
 		<tr>   
         <th>Cuisine Type</th>
-		<td>{{level1[11]}} </td>
+		<td>{{recipeLists[i][11]}} </td>
 		</tr>
 		
 		<tr>   
         <th>Meal Type</th>
-		<td>{{level1[12]}} </td>
+		<td>{{recipeLists[i][12]}} </td>
 		</tr>
 		
 		<tr>   
         <th>Dish Type</th>
-		<td>{{level1[13]}} </td>
+		<td>{{recipeLists[i][13]}} </td>
 		</tr>
 
 		{% endfor %}

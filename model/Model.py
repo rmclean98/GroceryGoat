@@ -32,8 +32,6 @@ class Todo(db.Model):
 	listId = db.Column(db.Integer, db.ForeignKey('ListDetails.listId'))
 	text = db.Column(db.String(200))
 	complete = db.Column(db.Boolean)
-	def __repr__(self):
-		return self.text
 
     
 

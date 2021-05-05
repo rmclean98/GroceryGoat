@@ -53,18 +53,20 @@ def addList():
 	list = ListDetails(listTitle=ln,userId=x)
 	db.session.add(list)
 	db.session.commit()
-	newlistId = ListDetails.query.with_entities(ListDetails.listId).filter(ListDetails.userId==x).filter(ListDetails.listTitle==ln)
-	placeholder = Todo(listId=newlistId)
-	db.session.add(placeholder)
-	db.session.commit()
 	return redirect(url_for('lists'))
 
 @app.route('/showList/<listId>')
 def showList(listId):
-	
-	#incomplete = Todo.query.with_entities(Todo).filter(complete=False).all()
-	#complete = Todo.query.filter(complete=True).all()
-	return render_template('GGLists.html', incomplete=incomplete, complete=complete,lists = users_lists, listId=listsname[0])
+	title = None
+	x = session['user_id']
+	users_lists = ListDetails.query.with_entities(ListDetails.userId, ListDetails.listTitle,ListDetails.listId).filter(ListDetails.userId==x).all()
+	for i in users_lists:
+		if (int(i.listId) == int(listId)):
+			title = i.listTitle
+	#incomplete = Todo.query.with_entities(Todo).filter(Todo.complete==False).filter(Todo.listId==listId).all()
+	#complete = Todo.query.with_entities(Todo).filter(Todo.complete==True).filter(Todo.listId==listId).all()
+	status = Todo.query.with_entities(Todo.text, Todo.complete, Todo.id).filter(Todo.listId==listId).all()
+	return render_template('GGLists.html', status = status,lists = users_lists, listId=title, currentID=int(listId))
 
 	
 
@@ -75,64 +77,103 @@ def addItem(listId):
 		return redirect(url_for('lists'))
 	else:
 		print("here")
+		input = request.form['todoitem']
+		if(input is None):
+			#redirect confirmation popup
+			return redirect(url_for('lists'))
 		todo = Todo(listId=listId, text=request.form['todoitem'], complete=False)
 		db.session.add(todo)
 		db.session.commit()
-	return showList(listId)
+		return redirect(url_for('showList', listId=listId))
+	
+
 
 
 @app.route('/Lists')
 def lists():
 	if 'user_id' in session:
 		x = session['user_id']
-		listsname = []
 		users_lists = ListDetails.query.with_entities(ListDetails.userId, ListDetails.listTitle,ListDetails.listId).filter(ListDetails.userId==x).all()
-		print(users_lists[0].listId)
-		for user in users_lists:
-			#print(user.listTitle)
-			listsname.append(user.listId)
-			listsname.append(user.listTitle)
 		if len(users_lists)==0:
 			print('user has no lists')
-			incomplete = Todo.query.filter_by(complete=False).all()
-			complete = Todo.query.filter_by(complete=True).all()
-			return render_template('GGLists.html', incomplete=incomplete, complete=complete,lists=users_lists, listId=0)
-		incomplete = Todo.query.filter_by(complete=False).filter_by().all()
-		complete = Todo.query.filter_by(complete=True).all()
-		return render_template('GGLists.html', incomplete=incomplete, complete=complete,lists = users_lists, listId=users_lists[0].listId)
+			#incomplete = Todo.query.with_entities(Todo).filter(Todo.complete==False).filter(Todo.listId==users_lists[0].listId).all()
+			#complete = Todo.query.with_entities(Todo).filter(Todo.complete==True).filter(Todo.listId==users_lists[0].listId).all()
+			status = Todo.query.with_entities(Todo.text, Todo.complete, Todo.id).filter(Todo.listId==0).all()
+			return render_template('GGLists.html', status=status, lists = users_lists, listId=0, currentID=0)
+		#incomplete = Todo.query.with_entities(Todo,).filter(Todo.complete==False).filter(Todo.listId==users_lists[0].listId).all()
+		status = Todo.query.with_entities(Todo.text, Todo.complete, Todo.id).filter(Todo.listId==users_lists[0].listId).all()
+		#print(status)
+		return render_template('GGLists.html', status=status, lists = users_lists, listId=users_lists[0].listTitle, currentID=users_lists[0].listId)
 	return redirect(url_for('login'))
 
 @app.route('/complete/<id>')
 def complete(id):
+	todo = Todo.query.filter(Todo.id==id).first()	
+	listNum = todo.listId
+
+	if(todo.complete == False):
+		todo.complete = True
+	else:
+		todo.complete = False
+	db.session.commit()
   
-#   using the todo object from the session thats filter by this id. this way we're changing the value of 
-#   todo itme in the db session
-    todo = db.session.query(Todo).filter_by(id=int(id)).first()
-    todo.complete = True
-    db.session.commit()
+	return redirect(url_for('showList', listId=listNum))
+
+@app.route('/addToList/<ing>/<id>')
+def addToList(ing, id):
+	with open('data.json') as json_file:
+		data = json.load(json_file)
+		#print(data)
+	todo = Todo.query.filter(Todo.id==id).first()
+	tmp = None
+	for p in data[int(ing)]['ingredients']:
+		if(tmp is not p['text']):
+			tmp = p['text']
+			newing = Todo(listId=id, text=p['text'], complete=False)
+			db.session.add(newing)
+		
+	db.session.commit()
+	
+	return redirect(url_for('showList', listId=id))
+
+@app.route('/delList/<listId>')
+def delList(listId):
+	ld = ListDetails.query.filter_by(listId=int(listId)).first()
+	todo = Todo.query.filter(Todo.listId==listId).all()
+	
+	
+	for bye in todo:
+		db.session.delete(bye)
+
+	db.session.delete(ld)
+	db.session.commit()
   
-    return redirect(url_for('lists'))
+	return redirect(url_for('lists'))
 
 @app.route('/Recipes', methods = ["GET", "POST"])
 def recipes():
-    if request.method == "POST":
-        recipe_input = request.form.get("search")
-        recipe_amount = request.form.get("amount")
-        if(recipe_input == ""):
-            alertOption="alert alert-success"
-            confirmMessage0='Search Failed'
-            confirmMessage1='Enter a value into the search box'
-            confirmMessage2=''
-            redirection='/Recipes'
-            return render_template('confirmation.html',alertOption=alertOption,confirmMessage0=confirmMessage0,confirmMessage1=confirmMessage1,confirmMessage2=confirmMessage2,redirection=redirection)
-        allRecipes = requests.get('https://api.edamam.com/search?q=' + recipe_input + '&app_id=c4fad94b&app_key=67c768fc1f825a76bea9f5ca1975eb4e&from=0&to=' + recipe_amount)
-        allRecipesDic = json.loads(allRecipes.text)
-        recipes = cleanData(allRecipesDic)
-        ingredients = recipes[0][8].split(', ')
-        healthlabel = recipes[0][6].split(', ')
-        print(ingredients)
-        return render_template('GGRecipe.html',recipeLists=recipes, ingredients=ingredients,healthlabel=healthlabel)
-    return render_template('GGRecipe.html')
+	if request.method == "POST":
+		x = session['user_id']
+		users_lists = ListDetails.query.with_entities(ListDetails.userId, ListDetails.listTitle,ListDetails.listId).filter(ListDetails.userId==x).all()
+		recipe_input = request.form.get("search")
+		recipe_amount = request.form.get("amount")
+		if(recipe_input == ""):
+			alertOption="alert alert-success"
+			confirmMessage0='Search Failed'
+			confirmMessage1='Enter a value into the search box'
+			confirmMessage2=''
+			redirection='/Recipes'
+			return render_template('confirmation.html',alertOption=alertOption,confirmMessage0=confirmMessage0,confirmMessage1=confirmMessage1,confirmMessage2=confirmMessage2,redirection=redirection)
+		allRecipes = requests.get('https://api.edamam.com/search?q=' + recipe_input + '&app_id=c4fad94b&app_key=67c768fc1f825a76bea9f5ca1975eb4e&from=0&to=' + recipe_amount)
+		allRecipesDic = json.loads(allRecipes.text)
+		with open('data.json', 'w') as outfile:
+			json.dump(allRecipesDic, outfile)
+		recipes = cleanData(allRecipesDic)
+		for i in recipes:
+			i[8] = i[8].split(', ')
+			i[6] = i[6].split(', ')
+		return render_template('GGRecipe.html',recipeLists=recipes, userslist=users_lists)
+	return render_template('GGRecipe.html')
 
 @app.route('/Login', methods=['GET', 'POST'])
 def login():

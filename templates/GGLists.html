@@ -1,43 +1,10 @@
 {% extends "template.html" %}
 
-<head>
-    {% block head %}
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <style>
-
-        .list-row {
-            border: 1px solid black;
-        }
-
-        .list-button {
-            border-radius: 0px;
-        }
-
-        .my-col {
-            border: 1px solid black;
-        }
-
-        body {
-            background: rgb(255, 255, 255);
-            color: rgb(117, 117, 117);
-            margin-top: 5px;
-        }
-
-        .button {
-            color: rgb(44, 44, 44);
-        }
-
-        .mark {
-            font-size: 10px;
-        }
-    </style>
-    {% endblock %}
-</head>
 <body>
-    {% block body %}
-    <div class="row">    
-        <div class="col-md-3">
-            <div>
+    {% block body %}   
+    <div class="h-100 row" >    
+        <div class="h-100 col-md-3" style="background-color: rgba(223, 223, 223, 0.377);">
+            <div style="margin-left: 20px;">
                 <h2>Lists</h2>
                 Create a new list
                 <form action="{{ url_for('addList') }}" method="POST">
@@ -45,49 +12,54 @@
                     <input type="submit" value="Create list" class="btn btn-primary">
                 </form>
                 {% for item in lists %}
-                <div class="row">
-                    <a href="{{ url_for('showList', listId=item.listId ) }}">    
+                <div class="row my-lists"style="padding:5px;">
+                    <a href="{{ url_for('showList', listId=item.listId ) }}">
+                        {% if currentID == item.listId  %}    
+                        <button class="btn btn-primary">{{ item.listTitle }} </button>
+                        {% else %}
                         <button class="btn btn-dark" >{{ item.listTitle }} </button>
+                        {% endif %}
+                    </a>
+                    <a href="{{ url_for('delList', listId=item.listId ) }}">    
+                        <button class="btn btn-danger" style="margin-left: 4px;"> Delete</button> 
                     </a>
                 </div>
-				{% endfor %}
+                {% endfor %}
 
             </div>
     
         </div>
-        {% if listId == 0%}
+        {% if currentID == 0%}
 
         {% else %}
         <div class="col-md-9">
             <div>
-                Add a new item
-                <form action="{{ url_for('addItem', listId=listId) }}" method="POST">
+                <h2>Add a new item</h2>
+                <form action="{{ url_for('addItem', listId=currentID) }}" method="POST">
                 
-                    <input type="text" name="todoitem">
+                    <input type="text" name="todoitem" placeholder="Item name">
                     <input type="submit" value="Add Item" class="btn btn-primary">
                 </form>
             </div>
             <div>
-                <h2>Incomplete Items</h2>
+                <h2>{{ listId }}</h2>
                 <ul>
-                    {% for todo in incomplete %}
-                    <li style="font-size: 30pt" class='mark'>{{ todo.text }} <a href="{{ url_for('complete', id=todo.id) }}">Mark As Complete</a></li>
+                    {% for todo in status %}
+                        {% if todo.complete == False%}
+                            <li style="font-size: 30pt" ><a href="{{ url_for('complete', id=todo['id']) }}">{{ todo.text }} </a></li>
+                        {% else %}
+                            <li style="font-size: 30pt"> <a href="{{ url_for('complete', id=todo['id']) }}"><del>{{ todo.text }}</a></del></li>
+                        {% endif %}
                     {% endfor %}
                 </ul>
-                <h2>Completed Items</h2>
-                <ul>
-                    {% for todo in complete %}
-                    <li style="font-size: 30pt">{{ todo.text }}</li>
-                    {% endfor %}
-                </ul>
+                
+                
             </div>
         </div>
         {% endif %}
-   </div>
-
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    </div>
+    
+    
     {% endblock %}
 </body>
 
