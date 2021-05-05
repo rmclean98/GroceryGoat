@@ -8,12 +8,10 @@
 
     
     <style>
-        html{
-            min-height: 100%;
-        }
-        body {
+        
+        html,body {
             height: 100%;
-            background: linear-gradient(to bottom right, #66ff33 0%, #658506 90%);
+            background-color: #90b84d !important;
         }
     </style>
 	{% endblock %}
@@ -22,7 +20,7 @@
 	{% block navbar %}
     
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-        <a href="/" class="navbar-brand">Grocery Goat</a>
+        <a href="/Lists" class="navbar-brand">Grocery Goat</a>
         <button class="navbar-toggler  ml-auto" data-toggle="collapse" data-target="#navbarMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -31,7 +29,13 @@
                 {% if g.user %}
 			<li class="nav-item">
 				<a href="/Logout" class="nav-link">Logout</a>	
+			</li>
+            <li class="nav-item">
+				<a href="/Account" class="nav-link">Account</a>	
 			</li>	
+            <li class="nav-item">
+                <a href="/Recipes" class="nav-link">Recipes</a>
+            </li>
 		{% else %}
 			<li class="nav-item">
                                 <a href="/Login" class="nav-link">Login</a>
@@ -40,9 +44,7 @@
                 <li class="nav-item">
                     <a href="/Lists" class="nav-link">Lists</a>
                 </li>
-                <li class="nav-item">
-                    <a href="/Recipes" class="nav-link">Recipes</a>
-                </li>
+                
 
                 <li class="nav-item">
                   <a href="/Contact" class="nav-link">Contact</a>
@@ -53,9 +55,9 @@
     </nav>
 	{% endblock %}
 	{% block body %}
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbg">        
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 	{% endblock %}
 </body>
 

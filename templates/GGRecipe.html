@@ -1,41 +1,46 @@
 {% extends "template.html" %}
-<head>
-{% block head%}
-<style>
-thead > tr > th {
-  background-color: #cce;
-  font-size: 18px;
-  border-bottom: 2px solid #999;
-}
-html{
-            min-height: 100%;
-        }
-        body {
-           height: 100%;
-           background: linear-gradient(to bottom right, #66ff33 0%, #658506 90%);
-        }
-</style>
-{% endblock%}
-</head>
-<body>
+
+<body style="background-color: aquamarine;">
 	{% block body %}
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <h1 style="padding-top: 10px; padding-bottom:10px; text-align: center;">Find A Recipe</h1>
-    <form action="" style="width: 500px; margin:auto" method="POST">
+    <form action="" style="width: 500px; margin:auto;" method="POST">
 
         <div class="form-group">
             <label for="search">Search</label>
             <input type="text" name="search" id="search" class="form-control" />
-         </div>
-         <div class="form-group">
+        </div>
+        <div class="form-group">
             <label for="amount">Amount to search</label>
-            <select name="amount" id="amount" class="form-control">
-            	<option value="1">1</option>
-  				<option value="2">2</option>
-  				<option value="3">3</option>
-  				<option value="4">4</option>
-  				<option value="5">5</option>
-            </select>
+                <select name="amount" id="amount" class="form-control">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+        </div>
+        <div class="form-group">
+            <label for="health">Health Labels:</label>
+            <div>
+            <label for="health">Gluten Free:</label>
+            <input type="checkbox" value="gluten-free" name='health'>
+            </label>
+            <label for="health">Keto:</label>
+            <input type="checkbox" value="keto-friendly" name='health'>
+            </label>
+            <label for="health">Dairy Free:</label>
+            <input type="checkbox" value="dairy-free" name='health'>
+            </label>
+            <label for="health">Vegan:</label>
+            <input type="checkbox" value="vegan" name='health'>
+            </label>
+            <label for="health">Vegetarian:</label>
+            <input type="checkbox" value="vegetarian" name='health'>
+            </label>
+            <label for="health">Wheat-Free:</label>
+            <input type="checkbox" value="wheat-free" name='health'>
+            </label>
+            </div>
         </div>
     
     <div class="col-md-12 text-center">
@@ -47,7 +52,6 @@ html{
   <div class="tab-pane active" id="first">
      <div align="justify">
      {% if recipeLists|length == 0%} 
-     <p></p>
       {% else %}
       <H2>Recipes:</H2> 
     <div class="table-responsive" id="dataTablediv1"> 
@@ -143,9 +147,7 @@ html{
      </tbody>
      </table>
    </div>
-   	</div>		
-            
- 	
+   	</div> 	
   </div>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

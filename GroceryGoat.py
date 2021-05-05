@@ -158,6 +158,7 @@ def recipes():
 		users_lists = ListDetails.query.with_entities(ListDetails.userId, ListDetails.listTitle,ListDetails.listId).filter(ListDetails.userId==x).all()
 		recipe_input = request.form.get("search")
 		recipe_amount = request.form.get("amount")
+		healthLabels = request.form.getlist("health")
 		if(recipe_input == ""):
 			alertOption="alert alert-success"
 			confirmMessage0='Search Failed'
@@ -165,7 +166,13 @@ def recipes():
 			confirmMessage2=''
 			redirection='/Recipes'
 			return render_template('confirmation.html',alertOption=alertOption,confirmMessage0=confirmMessage0,confirmMessage1=confirmMessage1,confirmMessage2=confirmMessage2,redirection=redirection)
-		allRecipes = requests.get('https://api.edamam.com/search?q=' + recipe_input + '&app_id=c4fad94b&app_key=67c768fc1f825a76bea9f5ca1975eb4e&from=0&to=' + recipe_amount)
+		healthLabel = ""
+		if(len(healthLabels) == 0):
+			allRecipes = requests.get('https://api.edamam.com/search?q=' + recipe_input + '&app_id=c4fad94b&app_key=67c768fc1f825a76bea9f5ca1975eb4e&from=0&to=' + recipe_amount)
+		else:
+			for i in healthLabels:
+				healthLabel += "&health=" + i
+			allRecipes = requests.get('https://api.edamam.com/search?q=' + recipe_input + '&app_id=c4fad94b&app_key=67c768fc1f825a76bea9f5ca1975eb4e&from=0&to=' + recipe_amount + healthLabel)
 		allRecipesDic = json.loads(allRecipes.text)
 		with open('data.json', 'w') as outfile:
 			json.dump(allRecipesDic, outfile)
@@ -256,10 +263,39 @@ def signup():
 def contact():
     return render_template('contact.html')
 
-@app.route('/Account')
+@app.route('/Account', methods=['GET','POST'])
 def account():
-    return render_template('GGAccount.html')
-    
+	if request.method == 'POST':
+		x = session['user_id']
+		user = Users.query.filter(Users.userId==x).first()
+		oldpass = user.password	
+		if oldpass == request.form.get('oldpassword'):
+			newpass = request.form.get('password')
+			renewpass = request.form.get('repassword')
+			if newpass == renewpass:
+				user.password = newpass
+				db.session.commit()
+				redirection ='/Lists'
+				confirmMessage0='Success'
+				confirmMessage1='Your password has been changed'
+				alertOption="alert alert-success"
+				return render_template('confirmation.html',alertOption=alertOption,confirmMessage0=confirmMessage0,confirmMessage1=confirmMessage1,redirection=redirection)
+			else:
+				redirection ='/Account'
+				confirmMessage0='Uh Oh!'
+				confirmMessage1='New passwords dont match'
+				alertOption="alert alert-danger"
+				return render_template('confirmation.html',alertOption=alertOption,confirmMessage0=confirmMessage0,confirmMessage1=confirmMessage1,redirection=redirection)
+		else:
+			redirection ='/Account'
+			confirmMessage0='Uh Oh!'
+			confirmMessage1='Old password does not match stored value'
+			alertOption="alert alert-danger"
+			return render_template('confirmation.html',alertOption=alertOption,confirmMessage0=confirmMessage0,confirmMessage1=confirmMessage1,redirection=redirection)
+			
+	
+	return render_template('GGAccount.html')
+
 def cleanData(recipes):
 	recipeDic = recipes["hits"]
 	count = 0
